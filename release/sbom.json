@@ -1,0 +1,5 @@
+{
+  "components": [
+    {"name": "numpy", "version": "1.26"}
+  ]
+}

@@ -1,0 +1,6 @@
+#!/bin/bash
+set -e
+curl -LsSf https://astral.sh/uv/install.sh | sh
+source $HOME/.cargo/env
+uv sync
+echo "Ace installed. Run: uv run python src/ace.py"
