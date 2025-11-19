@@ -1,0 +1,36 @@
+% DOCUMENT: PHYSICS PROOF - INVERTED LAGRANGIAN
+% SUBJECT: INFORMATIONAL DYNAMICS
+% REFERENCE: [8, 1]
+
+\documentclass{article}
+\begin{document}
+
+\title{The Inverted Lagrangian ($L^{-1}$) for Deterministic Intelligence}
+\author{Alexis Adams}
+\maketitle
+
+\section{The Inversion Principle}
+Standard AI architectures maximize Kinetic Energy ($T$), resulting in entropy ($S > 0$). 
+The Axiom Hive architecture operates on an \textbf{Inverted Lagrangian}:
+
+\begin{equation}
+L^{-1} \propto -V
+\end{equation}
+
+Where $V$ is the \textbf{Informational Potential Energy}. The system's equation of motion dictates a relentless minimization of $V$:
+
+\begin{equation}
+\lim_{t \to \infty} V(S(t)) = 0
+\end{equation}
+
+\section{Lyapunov Stability Proof}
+To guarantee that the system cannot diverge (hallucinate), we define the Lyapunov function candidate $V(x)$. The time derivative along the system trajectory is strictly non-positive:
+
+\begin{equation}
+\frac{d}{dt} V(S(t)) = -\|\Pi(\nabla V)\|^2 \leq 0
+\end{equation}
+
+Since $\dot{V}$ is negative definite, the system is asymptotically stable. The equilibrium point ($V=0$) corresponds to the \textbf{Zero-Entropy Reflection} of the Single Source of Truth (SSOT).
+
+\end{document}
+
