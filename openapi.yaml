@@ -55,9 +55,9 @@ components:
           format: float
         top_k:
           type: integer
-        payment_token:
+        lightning_invoice:
           type: string
-          description: Required when payment is enforced for creative mode.
+          description: Required Lightning invoice when payment is enforced for creative mode.
       required: [prompt]
     CreativeResponse:
       type: object
@@ -78,9 +78,9 @@ components:
           type: string
         max_steps:
           type: integer
-        payment_token:
+        lightning_invoice:
           type: string
-          description: Required unless running a free_local verified request and policy permits.
+          description: Required Lightning invoice unless running a free_local verified request and policy permits.
         allow_network:
           type: boolean
           description: Allow networked operations (remote proofs/peers); defaults to false/offline.

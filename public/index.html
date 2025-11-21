@@ -16,7 +16,7 @@
       <section class="panel">
         <h2>Creative Mode</h2>
         <textarea id="prompt" placeholder="Describe what you want to create..."></textarea>
-        <input id="paymentTokenCreative" placeholder="payment token (JWT) for creative" />
+        <input id="paymentInvoiceCreative" placeholder="Lightning invoice for creative" />
         <button id="runCreative">Generate</button>
         <pre id="creativeOutput"></pre>
       </section>
@@ -29,7 +29,7 @@
         <label class="inline">
           <input type="checkbox" id="freeLocal" /> Free local verified run (no Lightning)
         </label>
-        <input id="paymentToken" placeholder="payment token (ln invoice or session token)" />
+        <input id="paymentInvoice" placeholder="Lightning invoice for verified" />
         <button id="runVerified">Generate & Verify</button>
         <pre id="verifiedOutput"></pre>
       </section>

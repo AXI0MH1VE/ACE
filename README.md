@@ -9,12 +9,11 @@ AxiomHive fuses parallel State Space Models (Mamba-2) with attention heads (5:1 
 3) Open `public/index.html` (or `npm serve` / `python -m http.server`) to hit the API.
 4) Build the Tauri desktop shell: `installer/build.ps1` (Windows) or `installer/build.sh` (macOS/Linux).
 
-## Safety, control, ownership
+## Payment & safety
 
-- Offline by default: outbound network is blocked unless `AXIOMHIVE_ALLOW_NETWORK=1` or the UI checkbox is enabled for a request.
-- Paywall: JWT payment token is required for Creative and Verified calls unless you explicitly disable via env (`AXIOMHIVE_REQUIRE_PAYMENT_CREATIVE=0` or `AXIOMHIVE_REQUIRE_PAYMENT=0`) or mark the request as `free_local` (if node policy permits).
-- Verified mode payment: required unless `AXIOMHIVE_REQUIRE_PAYMENT=0` or the UI "Free local" checkbox is checked (and node policy permits). Set `AXIOMHIVE_JWT_SECRET` to validate tokens issued by your checkout flow.
-- Axiom set is required for verified calls; requests fail closed if verification fails or policy denies.
+- Lightning-only paywall: pass a valid Lightning invoice on creative/verified requests unless you disable via env (`AXIOMHIVE_REQUIRE_PAYMENT=0`) or mark `free_local` (for internal use). No cards/subscriptions/JWTs.
+- Offline by default: outbound network remains blocked unless `AXIOMHIVE_ALLOW_NETWORK=1` or the UI checkbox is enabled for that request.
+- Axiom set is required for verified calls; outputs fail closed if verification fails or policy denies.
 - Safety gating uses blocklists and escalation for high-risk terms before any generation runs (see `policy/` and API handlers).
 
 ## Project layout
@@ -37,7 +36,7 @@ AxiomHive fuses parallel State Space Models (Mamba-2) with attention heads (5:1 
 ## API (edge node)
 
 - `POST /api/v1/creative` -> `{ prompt, media, temperature, top_k }`
-- `POST /api/v1/verified` -> `{ prompt, axiom_set, max_steps, payment_token, allow_network, free_local }`
+- `POST /api/v1/verified` -> `{ prompt, axiom_set, max_steps, lightning_invoice, allow_network, free_local }`
 
 See `openapi.yaml` for full schemas.
 

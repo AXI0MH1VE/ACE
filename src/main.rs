@@ -9,22 +9,12 @@ use std::sync::Arc;
 use tokio::signal;
 use tracing::info;
 use uuid::Uuid;
-use jsonwebtoken as jwt;
-use jwt::{DecodingKey, Validation};
 
 fn env_flag(key: &str, default: bool) -> bool {
     std::env::var(key)
         .ok()
         .map(|v| matches!(v.as_str(), "1" | "true" | "TRUE" | "yes" | "on"))
         .unwrap_or(default)
-}
-
-#[derive(Clone, Debug, Deserialize)]
-struct Claims {
-    sub: String,
-    tier: String,
-    credits: usize,
-    exp: usize,
 }
 
 #[derive(Clone)]
@@ -102,44 +92,12 @@ impl SafetyPolicy {
 }
 
 #[derive(Clone)]
-struct BillingPolicy {
-    require_payment_creative: bool,
-    require_payment_verified: bool,
-    jwt_secret: Option<String>,
-}
-
-impl BillingPolicy {
-    fn from_env() -> Self {
-        Self {
-            require_payment_creative: env_flag("AXIOMHIVE_REQUIRE_PAYMENT_CREATIVE", true),
-            require_payment_verified: env_flag("AXIOMHIVE_REQUIRE_PAYMENT", true),
-            jwt_secret: std::env::var("AXIOMHIVE_JWT_SECRET").ok(),
-        }
-    }
-
-    fn validate_token(&self, token: Option<&str>) -> Option<Claims> {
-        let secret = self.jwt_secret.as_ref()?;
-        let token = token?;
-        let mut validation = Validation::new(jwt::Algorithm::HS256);
-        validation.validate_exp = true;
-        jwt::decode::<Claims>(
-            token,
-            &DecodingKey::from_secret(secret.as_bytes()),
-            &validation,
-        )
-        .ok()
-        .map(|data| data.claims)
-    }
-}
-
-#[derive(Clone)]
 struct AppState {
     hybrid: model::hybrid_block::HybridBlock,
     checker: verification::axiom_checker::AxiomChecker,
     billing: payment::bitcoin::LightningBilling,
     dag: dag::dag::DagScheduler,
     safety: SafetyPolicy,
-    billing_policy: BillingPolicy,
 }
 
 #[derive(Debug, Deserialize)]
@@ -148,7 +106,7 @@ struct CreativeRequest {
     media: Option<Vec<String>>, // ["text", "image", "audio", "pdf"]
     temperature: Option<f32>,
     top_k: Option<usize>,
-    payment_token: Option<String>,
+    lightning_invoice: Option<String>,
 }
 
 #[derive(Debug, Serialize)]
@@ -163,7 +121,7 @@ struct VerifiedRequest {
     prompt: String,
     axiom_set: Option<String>,
     max_steps: Option<u32>,
-    payment_token: Option<String>,
+    lightning_invoice: Option<String>,
     allow_network: Option<bool>,
     free_local: Option<bool>,
 }
@@ -186,7 +144,6 @@ async fn main() -> anyhow::Result<()> {
         billing: payment::bitcoin::LightningBilling::new("axiomhive-edge"),
         dag: dag::dag::DagScheduler::default(),
         safety: SafetyPolicy::default(),
-        billing_policy: BillingPolicy::from_env(),
     });
 
     let api = Router::new()
@@ -233,15 +190,12 @@ async fn handle_creative(
         SafetyAction::Allow => {}
     }
 
-    if app.billing_policy.require_payment_creative {
-        let claims = app.billing_policy.validate_token(body.payment_token.as_deref());
-        if claims.is_none() {
-            return Json(CreativeResponse {
-                request_id: Uuid::new_v4(),
-                output: "payment required: provide valid token".into(),
-                mode: "creative_denied".into(),
-            });
-        }
+    if app.safety.require_payment && !app.billing.verify_payment(body.lightning_invoice.as_deref().unwrap_or("")) {
+        return Json(CreativeResponse {
+            request_id: Uuid::new_v4(),
+            output: "payment required: provide valid Lightning invoice".into(),
+            mode: "creative_denied".into(),
+        });
     }
 
     let request_id = Uuid::new_v4();
@@ -265,7 +219,7 @@ async fn handle_verified(
             &body.prompt,
             "verified",
             body.axiom_set.as_deref(),
-            body.payment_token.as_deref(),
+            None,
             body.allow_network.unwrap_or(false),
             body.free_local.unwrap_or(false),
         )
@@ -291,14 +245,11 @@ async fn handle_verified(
         SafetyAction::Allow => {}
     }
 
-    if app.billing_policy.require_payment_verified && !body.free_local.unwrap_or(false) {
-        let claims = app
-            .billing_policy
-            .validate_token(body.payment_token.as_deref());
-        if claims.is_none() {
+    if app.safety.require_payment && !body.free_local.unwrap_or(false) {
+        if !app.billing.verify_payment(body.lightning_invoice.as_deref().unwrap_or("")) {
             return Json(VerifiedResponse {
                 request_id: Uuid::new_v4(),
-                output: "payment required: provide valid token".into(),
+                output: "payment required: provide valid Lightning invoice".into(),
                 c0_signature: verification::axiom_checker::C0Signature::empty(),
                 proof_uri: "".into(),
                 merkle_root: "".into(),

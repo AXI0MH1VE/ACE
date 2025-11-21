@@ -9,8 +9,8 @@ async function postJson(url, payload) {
 
 document.getElementById("runCreative").addEventListener("click", async () => {
   const prompt = document.getElementById("prompt").value;
-  const payment_token = document.getElementById("paymentTokenCreative").value || undefined;
-  const data = await postJson("/api/v1/creative", { prompt, media: ["text"], temperature: 0.9, payment_token });
+  const lightning_invoice = document.getElementById("paymentInvoiceCreative").value || undefined;
+  const data = await postJson("/api/v1/creative", { prompt, media: ["text"], temperature: 0.9, lightning_invoice });
   document.getElementById("creativeOutput").textContent = JSON.stringify(data, null, 2);
 });
 
@@ -19,14 +19,14 @@ document.getElementById("runVerified").addEventListener("click", async () => {
   const axiom_set = document.getElementById("axioms").value || "default_finance_axioms";
   const allow_network = document.getElementById("allowNetwork").checked;
   const free_local = document.getElementById("freeLocal").checked;
-  const payment_token = document.getElementById("paymentToken").value || undefined;
+  const lightning_invoice = document.getElementById("paymentInvoice").value || undefined;
   const data = await postJson("/api/v1/verified", {
     prompt,
     axiom_set,
     max_steps: 2048,
     allow_network,
     free_local,
-    payment_token
+    lightning_invoice
   });
   document.getElementById("verifiedOutput").textContent = JSON.stringify(data, null, 2);
 });
