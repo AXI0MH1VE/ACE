@@ -34,6 +34,11 @@ textarea, input {
   padding: 12px;
   margin: 8px 0;
 }
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 10px;
+}
 button {
   background: linear-gradient(135deg, #22d3ee, #a855f7);
   border: none;

@@ -2,7 +2,7 @@ use crate::{
     audit::AuditLog,
     dag::dag::{DagScheduler, RequestDag},
     model::engine::HybridModelEngine,
-    payment::{bitcoin::LightningGateway, PaymentError},
+    payment::{bitcoin::LightningGateway, PaymentError, PaymentGateway},
     policy::{PolicyError, SafetyPolicy},
     verification::axiom_checker::{
         parse_axiom_set, C0Signature, DeterministicVerifier, VerificationError, Verifier,

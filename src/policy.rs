@@ -10,10 +10,17 @@ pub struct SafetyConfig {
     pub high_risk_terms: Vec<String>,
 }
 
+fn env_flag(key: &str, default: bool) -> bool {
+    std::env::var(key)
+        .ok()
+        .map(|v| matches!(v.as_str(), "1" | "true" | "TRUE" | "yes" | "on"))
+        .unwrap_or(default)
+}
+
 impl Default for SafetyConfig {
     fn default() -> Self {
         Self {
-            allow_network: false,
+            allow_network: env_flag("AXIOMHIVE_ALLOW_NETWORK", false),
             allow_verified: true,
             blocklist: vec![
                 "self-harm".into(),

@@ -10,28 +10,59 @@
   <div id="app">
     <header>
       <h1>AxiomHive</h1>
-      <p>Hybrid SSM + Attention AI • Creative & Verified Modes</p>
+      <p>Hybrid SSM + Attention AI — Creative & Verified Modes</p>
     </header>
     <main>
       <section class="panel">
-        <h2>Creative Mode</h2>
-        <textarea id="prompt" placeholder="Describe what you want to create..."></textarea>
-        <input id="paymentInvoiceCreative" placeholder="Lightning invoice for creative" />
-        <button id="runCreative">Generate</button>
-        <pre id="creativeOutput"></pre>
-      </section>
-      <section class="panel">
-        <h2>Verified Mode</h2>
-        <input id="axioms" placeholder="axiom set (e.g., finance.gaap2025)" />
+        <h2>Request</h2>
+        <label class="inline">
+          <input type="radio" name="mode" value="creative" checked> Creative
+        </label>
+        <label class="inline">
+          <input type="radio" name="mode" value="verified"> Verified
+        </label>
+
+        <textarea id="prompt" placeholder="Describe what you want to create or verify..."></textarea>
+
+        <label>Media (comma separated: text,image,audio,pdf)</label>
+        <input id="media" placeholder="text" value="text" />
+
+        <div class="grid">
+          <div>
+            <label>Temperature</label>
+            <input id="temperature" type="number" step="0.1" value="0.9" />
+          </div>
+          <div>
+            <label>Top K</label>
+            <input id="topK" type="number" value="64" />
+          </div>
+          <div>
+            <label>Max Steps (verified)</label>
+            <input id="maxSteps" type="number" value="1024" />
+          </div>
+        </div>
+
+        <label>Axiom Set (JSON for verified)</label>
+        <textarea id="axiomSet" rows="6" placeholder='{"name":"demo","version":"1","rules":[{"id":"contains","must_contain":["hello"]}]}'></textarea>
+
+        <label>Lightning Invoice</label>
+        <input id="invoice" placeholder="lnbc..." />
+
+        <label class="inline">
+          <input type="checkbox" id="freeLocal" /> Free local verified run
+        </label>
         <label class="inline">
           <input type="checkbox" id="allowNetwork" /> Allow network (remote proofs/peers)
         </label>
-        <label class="inline">
-          <input type="checkbox" id="freeLocal" /> Free local verified run (no Lightning)
-        </label>
-        <input id="paymentInvoice" placeholder="Lightning invoice for verified" />
-        <button id="runVerified">Generate & Verify</button>
-        <pre id="verifiedOutput"></pre>
+
+        <button id="submitBtn">Send</button>
+      </section>
+
+      <section class="panel">
+        <h2>Response</h2>
+        <pre id="responseOutput"></pre>
+        <h3>Verified Signature</h3>
+        <pre id="signatureOutput"></pre>
       </section>
     </main>
   </div>
