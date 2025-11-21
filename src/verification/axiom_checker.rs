@@ -1,6 +1,35 @@
-use chrono::Utc;
+use crate::model::engine::ModelEngine;
+use async_trait::async_trait;
+use blake3::Hasher;
 use serde::{Deserialize, Serialize};
+use serde_json;
 use sha2::{Digest, Sha256};
+use std::sync::Arc;
+use thiserror::Error;
+
+#[derive(Debug, Clone, Deserialize)]
+pub struct AxiomSet {
+    pub name: String,
+    pub version: String,
+    pub rules: Vec<AxiomRule>,
+}
+
+#[derive(Debug, Clone, Deserialize)]
+pub struct AxiomRule {
+    pub id: String,
+    pub must_contain: Option<Vec<String>>,
+    pub must_not_contain: Option<Vec<String>>,
+}
+
+#[derive(Debug, Error)]
+pub enum VerificationError {
+    #[error("invalid axiom_set: {0}")]
+    InvalidAxiomSet(String),
+    #[error("verification failed for rule: {0}")]
+    RuleFailed(String),
+    #[error("model error: {0}")]
+    ModelFailure(String),
+}
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct ProofCert {
@@ -35,30 +64,41 @@ impl C0Signature {
         }
     }
 
-    pub fn is_empty(&self) -> bool {
-        self.input_hash.is_empty() || self.axiom_hash.is_empty() || self.proof_cert.seal.is_empty()
+    fn deterministic_timestamp(prompt: &str, axiom_set: &AxiomSet, max_steps: u32) -> i64 {
+        let mut hasher = Hasher::new();
+        hasher.update(prompt.as_bytes());
+        hasher.update(
+            serde_json::to_string(axiom_set)
+                .unwrap_or_default()
+                .as_bytes(),
+        );
+        hasher.update(max_steps.to_be_bytes().as_slice());
+        let digest = hasher.finalize();
+        let mut bytes = [0u8; 8];
+        bytes.copy_from_slice(&digest.as_bytes()[..8]);
+        // restrict range to avoid overflow and keep monotonic-ish values
+        (u64::from_be_bytes(bytes) % 4_110_000_000) as i64
     }
-}
 
-#[derive(Clone, Default)]
-pub struct AxiomChecker;
-
-impl AxiomChecker {
-    pub fn new() -> Self {
-        Self
-    }
-
-    pub fn verify_and_sign(&self, output: &str, axiom_set: &str, max_steps: u32) -> C0Signature {
+    pub fn new(prompt: &str, axiom_set: &AxiomSet, output: &str, max_steps: u32) -> Self {
         let mut input_hasher = Sha256::new();
         input_hasher.update(output.as_bytes());
         let input_hash = format!("{:x}", input_hasher.finalize());
 
         let mut axiom_hasher = Sha256::new();
-        axiom_hasher.update(axiom_set.as_bytes());
+        axiom_hasher.update(
+            serde_json::to_string(axiom_set)
+                .unwrap_or_default()
+                .as_bytes(),
+        );
         let axiom_hash = format!("{:x}", axiom_hasher.finalize());
 
         let state_trace = blake3::hash(
-            format!("axiom={}::steps={}::output={}", axiom_set, max_steps, output).as_bytes(),
+            format!(
+                "axiom={}::steps={}::output={}",
+                axiom_hash, max_steps, output
+            )
+            .as_bytes(),
         )
         .to_hex()
         .to_string();
@@ -67,6 +107,8 @@ impl AxiomChecker {
             .to_hex()
             .to_string();
 
+        let timestamp = Self::deterministic_timestamp(prompt, axiom_set, max_steps);
+
         C0Signature {
             input_hash,
             axiom_hash,
@@ -74,10 +116,80 @@ impl AxiomChecker {
             proof_cert: ProofCert {
                 backend: "lean4".into(),
                 prover: "ezkl-halo2".into(),
-                circuit: format!("axiom_set::{axiom_set}"),
+                circuit: format!("axiom_set::{}", axiom_set.name),
                 seal: proof_seal,
-                timestamp_utc: Utc::now().timestamp(),
+                timestamp_utc: timestamp,
             },
         }
     }
+}
+
+#[async_trait]
+pub trait Verifier: Send + Sync {
+    async fn verify(
+        &self,
+        prompt: &str,
+        axiom_set: &AxiomSet,
+        max_steps: u32,
+    ) -> Result<(String, C0Signature), VerificationError>;
+}
+
+#[derive(Clone)]
+pub struct DeterministicVerifier<M: ModelEngine + Send + Sync + 'static> {
+    model: Arc<M>,
+}
+
+impl<M: ModelEngine + Send + Sync + 'static> DeterministicVerifier<M> {
+    pub fn new(model: Arc<M>) -> Self {
+        Self { model }
+    }
+
+    fn check_rules(output: &str, axiom_set: &AxiomSet) -> Result<(), VerificationError> {
+        let lower_output = output.to_lowercase();
+        for rule in &axiom_set.rules {
+            if let Some(required) = &rule.must_contain {
+                for token in required {
+                    if !lower_output.contains(&token.to_lowercase()) {
+                        return Err(VerificationError::RuleFailed(rule.id.clone()));
+                    }
+                }
+            }
+            if let Some(banned) = &rule.must_not_contain {
+                for token in banned {
+                    if lower_output.contains(&token.to_lowercase()) {
+                        return Err(VerificationError::RuleFailed(rule.id.clone()));
+                    }
+                }
+            }
+        }
+        Ok(())
+    }
+}
+
+#[async_trait]
+impl<M: ModelEngine + Send + Sync + 'static> Verifier for DeterministicVerifier<M> {
+    async fn verify(
+        &self,
+        prompt: &str,
+        axiom_set: &AxiomSet,
+        max_steps: u32,
+    ) -> Result<(String, C0Signature), VerificationError> {
+        let axiom_value = serde_json::to_value(axiom_set)
+            .map_err(|e| VerificationError::InvalidAxiomSet(e.to_string()))?;
+        let output = self
+            .model
+            .generate_verified(prompt, &axiom_value, max_steps)
+            .await
+            .map_err(|e| VerificationError::ModelFailure(e.to_string()))?;
+
+        Self::check_rules(&output, axiom_set)?;
+
+        let c0 = C0Signature::new(prompt, axiom_set, &output, max_steps);
+        Ok((output, c0))
+    }
+}
+
+pub fn parse_axiom_set(raw: &str) -> Result<AxiomSet, VerificationError> {
+    serde_json::from_str::<AxiomSet>(raw)
+        .map_err(|e| VerificationError::InvalidAxiomSet(e.to_string()))
 }

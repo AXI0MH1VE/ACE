@@ -1,4 +1,5 @@
-use rand::Rng;
+use blake3;
+use rand::{rngs::StdRng, Rng, SeedableRng};
 
 use super::attention::AttentionHead;
 use super::meta_tokens::MetaTokenInjector;
@@ -16,9 +17,9 @@ pub struct HybridBlockConfig {
 impl Default for HybridBlockConfig {
     fn default() -> Self {
         Self {
-            ssm_heads: 8,          // 85% SSM in a 5:1 ratio
-            attention_heads: 2,    // 15% attention
-            meta_tokens: 8,        // creative default (use 16 in verified mode)
+            ssm_heads: 8,       // 85% SSM in a 5:1 ratio
+            attention_heads: 2, // 15% attention
+            meta_tokens: 8,     // creative default (use 16 in verified mode)
             kv_stride: 2,
             sliding_window: 2048,
         }
@@ -48,8 +49,15 @@ impl HybridBlock {
         }
     }
 
-    pub fn generate_creative(&self, prompt: &str, temperature: f32, top_k: usize, media: Vec<String>) -> String {
-        let mut rng = rand::thread_rng();
+    pub fn generate_creative(
+        &self,
+        prompt: &str,
+        media: &[String],
+        temperature: f32,
+        top_k: usize,
+        seed: [u8; 32],
+    ) -> String {
+        let mut rng = StdRng::from_seed(seed);
         let injected = self.injector.inject(prompt, "creative");
         let ssm_trace = self
             .ssm_heads
@@ -75,8 +83,26 @@ impl HybridBlock {
         format!("{sample} :: sample_id={noise}")
     }
 
-    pub fn generate_verified(&self, prompt: &str) -> String {
-        let injected = self.injector.inject(prompt, "verified");
+    pub fn generate_creative_default(
+        &self,
+        prompt: &str,
+        temperature: f32,
+        top_k: usize,
+        media: Vec<String>,
+    ) -> String {
+        let seed = blake3::hash(format!("{prompt}:{temperature}:{top_k}:{:?}", media).as_bytes());
+        self.generate_creative(prompt, &media, temperature, top_k, *seed.as_bytes())
+    }
+
+    pub fn generate_verified(
+        &self,
+        prompt: &str,
+        axiom_fingerprint: &str,
+        max_steps: u32,
+    ) -> String {
+        let injected = self
+            .injector
+            .inject(&format!("{prompt} [axiom:{axiom_fingerprint}]"), "verified");
         let ssm = self
             .ssm_heads
             .iter()
@@ -90,8 +116,12 @@ impl HybridBlock {
             .collect::<Vec<_>>()
             .join(" | ");
         format!(
-            "[verified deterministic] meta={} ssm=[{}] attn=[{}] kv_stride={}",
-            self.config.meta_tokens, ssm, attn, self.config.kv_stride
+            "[verified deterministic] meta={} ssm=[{}] attn=[{}] kv_stride={} max_steps={}",
+            self.config.meta_tokens, ssm, attn, self.config.kv_stride, max_steps
         )
+    }
+
+    pub fn generate_verified_default(&self, prompt: &str) -> String {
+        self.generate_verified(prompt, "default_axiom", 1024)
     }
 }

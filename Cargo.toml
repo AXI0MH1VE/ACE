@@ -8,7 +8,7 @@ description = "Hybrid SSM + attention AI runtime with verified mode, DAG compute
 [features]
 default = ["cli"]
 cli = []
-wasm = []
+wasm = ["wasm-bindgen"]
 cuda = []
 tauri = []
 
@@ -22,6 +22,7 @@ tracing = "0.1"
 tracing-subscriber = { version = "0.3", features = ["fmt", "env-filter"] }
 thiserror = "1"
 rand = "0.8"
+async-trait = "0.1"
 sha2 = "0.10"
 blake3 = "1"
 ed25519-dalek = "2"
@@ -37,6 +38,9 @@ rayon = "1.8"
 tokio-stream = "0.1"
 sha3 = "0.10"
 bs58 = "0.5"
+wasm-bindgen = { version = "0.2", optional = true, features = ["serde-serialize"] }
 
 [dev-dependencies]
 tokio = { version = "1", features = ["macros", "rt-multi-thread"] }
+tower = "0.4"
+tempfile = "3"

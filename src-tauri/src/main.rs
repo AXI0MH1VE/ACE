@@ -1,20 +1,35 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
 use axiomhive::{
+    generate_verified_output,
     model::hybrid_block::{HybridBlock, HybridBlockConfig},
-    verification::axiom_checker::{AxiomChecker, C0Signature},
-    wasm_generate,
+    verification::axiom_checker::{AxiomSet, C0Signature},
 };
 
 #[tauri::command]
 fn verified(prompt: &str) -> (String, C0Signature) {
-    wasm_generate(prompt)
+    let axiom_set = AxiomSet {
+        name: "tauri_local".into(),
+        version: "0.1.0".into(),
+        rules: vec![],
+    };
+    tauri::async_runtime::block_on(generate_verified_output(
+        prompt,
+        &axiom_set,
+        256,
+    ))
+    .unwrap_or_else(|_| {
+        (
+            "verification failed".into(),
+            C0Signature::empty(),
+        )
+    })
 }
 
 #[tauri::command]
 fn creative(prompt: &str) -> String {
     let hybrid = HybridBlock::new(HybridBlockConfig::default());
-    hybrid.generate_creative(prompt, 0.9, 64, vec!["text".into()])
+    hybrid.generate_creative_default(prompt, 0.9, 64, vec!["text".into()])
 }
 
 fn main() {

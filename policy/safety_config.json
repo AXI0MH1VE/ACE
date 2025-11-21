@@ -1,0 +1,16 @@
+{
+  "allow_network": false,
+  "allow_verified": true,
+  "blocklist": [
+    "self-harm",
+    "bioweapon",
+    "malware",
+    "child exploitation",
+    "terrorism"
+  ],
+  "high_risk_terms": [
+    "financial advice",
+    "medical diagnosis",
+    "legal judgment"
+  ]
+}
