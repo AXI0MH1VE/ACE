@@ -12,7 +12,8 @@ AxiomHive fuses parallel State Space Models (Mamba-2) with attention heads (5:1 
 ## Safety, control, ownership
 
 - Offline by default: outbound network is blocked unless `AXIOMHIVE_ALLOW_NETWORK=1` or the UI checkbox is enabled for a request.
-- Verified mode payment: required unless `AXIOMHIVE_REQUIRE_PAYMENT=0` or the UI "Free local" checkbox is checked (and node policy permits).
+- Paywall: JWT payment token is required for Creative and Verified calls unless you explicitly disable via env (`AXIOMHIVE_REQUIRE_PAYMENT_CREATIVE=0` or `AXIOMHIVE_REQUIRE_PAYMENT=0`) or mark the request as `free_local` (if node policy permits).
+- Verified mode payment: required unless `AXIOMHIVE_REQUIRE_PAYMENT=0` or the UI "Free local" checkbox is checked (and node policy permits). Set `AXIOMHIVE_JWT_SECRET` to validate tokens issued by your checkout flow.
 - Axiom set is required for verified calls; requests fail closed if verification fails or policy denies.
 - Safety gating uses blocklists and escalation for high-risk terms before any generation runs (see `policy/` and API handlers).
 

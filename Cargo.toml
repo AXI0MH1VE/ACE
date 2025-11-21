@@ -37,6 +37,7 @@ rayon = "1.8"
 tokio-stream = "0.1"
 sha3 = "0.10"
 bs58 = "0.5"
+jsonwebtoken = "9"
 
 [dev-dependencies]
 tokio = { version = "1", features = ["macros", "rt-multi-thread"] }

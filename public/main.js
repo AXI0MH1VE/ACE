@@ -9,7 +9,8 @@ async function postJson(url, payload) {
 
 document.getElementById("runCreative").addEventListener("click", async () => {
   const prompt = document.getElementById("prompt").value;
-  const data = await postJson("/api/v1/creative", { prompt, media: ["text"], temperature: 0.9 });
+  const payment_token = document.getElementById("paymentTokenCreative").value || undefined;
+  const data = await postJson("/api/v1/creative", { prompt, media: ["text"], temperature: 0.9, payment_token });
   document.getElementById("creativeOutput").textContent = JSON.stringify(data, null, 2);
 });
 
