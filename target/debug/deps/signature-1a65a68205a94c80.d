@@ -1,0 +1,12 @@
+C:\Users\devdo\OneDrive\Desktop\ACE\target\debug\deps\signature-1a65a68205a94c80.d: C:\Users\devdo\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\signature-2.2.0\src\lib.rs C:\Users\devdo\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\signature-2.2.0\src\hazmat.rs C:\Users\devdo\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\signature-2.2.0\src\encoding.rs C:\Users\devdo\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\signature-2.2.0\src\error.rs C:\Users\devdo\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\signature-2.2.0\src\keypair.rs C:\Users\devdo\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\signature-2.2.0\src\signer.rs C:\Users\devdo\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\signature-2.2.0\src\verifier.rs C:\Users\devdo\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\signature-2.2.0\src\../README.md
+
+C:\Users\devdo\OneDrive\Desktop\ACE\target\debug\deps\libsignature-1a65a68205a94c80.rmeta: C:\Users\devdo\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\signature-2.2.0\src\lib.rs C:\Users\devdo\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\signature-2.2.0\src\hazmat.rs C:\Users\devdo\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\signature-2.2.0\src\encoding.rs C:\Users\devdo\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\signature-2.2.0\src\error.rs C:\Users\devdo\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\signature-2.2.0\src\keypair.rs C:\Users\devdo\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\signature-2.2.0\src\signer.rs C:\Users\devdo\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\signature-2.2.0\src\verifier.rs C:\Users\devdo\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\signature-2.2.0\src\../README.md
+
+C:\Users\devdo\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\signature-2.2.0\src\lib.rs:
+C:\Users\devdo\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\signature-2.2.0\src\hazmat.rs:
+C:\Users\devdo\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\signature-2.2.0\src\encoding.rs:
+C:\Users\devdo\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\signature-2.2.0\src\error.rs:
+C:\Users\devdo\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\signature-2.2.0\src\keypair.rs:
+C:\Users\devdo\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\signature-2.2.0\src\signer.rs:
+C:\Users\devdo\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\signature-2.2.0\src\verifier.rs:
+C:\Users\devdo\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\signature-2.2.0\src\../README.md:

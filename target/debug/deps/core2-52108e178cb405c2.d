@@ -1,0 +1,12 @@
+C:\Users\devdo\OneDrive\Desktop\ACE\target\debug\deps\core2-52108e178cb405c2.d: C:\Users\devdo\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\core2-0.4.0\src\lib.rs C:\Users\devdo\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\core2-0.4.0\src\error.rs C:\Users\devdo\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\core2-0.4.0\src\io\mod.rs C:\Users\devdo\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\core2-0.4.0\src\io\cursor.rs C:\Users\devdo\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\core2-0.4.0\src\io\error.rs C:\Users\devdo\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\core2-0.4.0\src\io\impls.rs C:\Users\devdo\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\core2-0.4.0\src\io\traits.rs C:\Users\devdo\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\core2-0.4.0\src\io\util.rs
+
+C:\Users\devdo\OneDrive\Desktop\ACE\target\debug\deps\libcore2-52108e178cb405c2.rmeta: C:\Users\devdo\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\core2-0.4.0\src\lib.rs C:\Users\devdo\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\core2-0.4.0\src\error.rs C:\Users\devdo\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\core2-0.4.0\src\io\mod.rs C:\Users\devdo\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\core2-0.4.0\src\io\cursor.rs C:\Users\devdo\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\core2-0.4.0\src\io\error.rs C:\Users\devdo\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\core2-0.4.0\src\io\impls.rs C:\Users\devdo\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\core2-0.4.0\src\io\traits.rs C:\Users\devdo\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\core2-0.4.0\src\io\util.rs
+
+C:\Users\devdo\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\core2-0.4.0\src\lib.rs:
+C:\Users\devdo\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\core2-0.4.0\src\error.rs:
+C:\Users\devdo\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\core2-0.4.0\src\io\mod.rs:
+C:\Users\devdo\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\core2-0.4.0\src\io\cursor.rs:
+C:\Users\devdo\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\core2-0.4.0\src\io\error.rs:
+C:\Users\devdo\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\core2-0.4.0\src\io\impls.rs:
+C:\Users\devdo\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\core2-0.4.0\src\io\traits.rs:
+C:\Users\devdo\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\core2-0.4.0\src\io\util.rs:

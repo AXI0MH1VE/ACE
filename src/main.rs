@@ -151,10 +151,11 @@ async fn main() -> anyhow::Result<()> {
         .route("/api/v1/verified", post(handle_verified))
         .with_state(app_state);
 
-    let addr = "0.0.0.0:8090".parse()?;
-    info!("Starting AxiomHive edge node on {addr}");
-    axum::Server::bind(&addr)
-        .serve(api.into_make_service())
+    let addr = "127.0.0.1:8090".parse::<std::net::SocketAddr>()?;
+    info!("Starting AxiomHive edge node on http://{addr}");
+    
+    let listener = tokio::net::TcpListener::bind(addr).await?;
+    axum::serve(listener, api)
         .with_graceful_shutdown(shutdown_signal())
         .await?;
     Ok(())
@@ -291,4 +292,3 @@ async fn handle_verified(
         proof_uri: format!("zkml://proofs/{request_id}"),
         merkle_root,
     })
-}
