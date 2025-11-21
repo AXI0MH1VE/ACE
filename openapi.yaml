@@ -1,0 +1,97 @@
+openapi: 3.0.3
+info:
+  title: AxiomHive Edge API
+  version: 0.1.0
+  description: Creative and verified generation over hybrid SSM+attention with C=0 signatures.
+servers:
+  - url: http://localhost:8090
+paths:
+  /api/v1/creative:
+    post:
+      summary: Generate creative content (text/image/audio/pdf hooks)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreativeRequest'
+      responses:
+        '200':
+          description: Creative generation response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreativeResponse'
+  /api/v1/verified:
+    post:
+      summary: Generate deterministic output and return C=0 signature
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VerifiedRequest'
+      responses:
+        '200':
+          description: Verified generation response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VerifiedResponse'
+components:
+  schemas:
+    CreativeRequest:
+      type: object
+      properties:
+        prompt:
+          type: string
+        media:
+          type: array
+          items:
+            type: string
+            enum: [text, image, audio, pdf]
+        temperature:
+          type: number
+          format: float
+        top_k:
+          type: integer
+      required: [prompt]
+    CreativeResponse:
+      type: object
+      properties:
+        request_id:
+          type: string
+          format: uuid
+        output:
+          type: string
+        mode:
+          type: string
+    VerifiedRequest:
+      type: object
+      properties:
+        prompt:
+          type: string
+        axiom_set:
+          type: string
+        max_steps:
+          type: integer
+      required: [prompt]
+    VerifiedResponse:
+      type: object
+      properties:
+        request_id:
+          type: string
+          format: uuid
+        output:
+          type: string
+        c0_signature:
+          type: object
+          properties:
+            input_hash: { type: string }
+            axiom_hash: { type: string }
+            state_trace: { type: string }
+            proof_cert: { type: string }
+        proof_uri:
+          type: string
+        merkle_root:
+          type: string

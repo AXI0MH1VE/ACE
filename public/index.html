@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AxiomHive</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="app">
+    <header>
+      <h1>AxiomHive</h1>
+      <p>Hybrid SSM + Attention AI • Creative & Verified Modes</p>
+    </header>
+    <main>
+      <section class="panel">
+        <h2>Creative Mode</h2>
+        <textarea id="prompt" placeholder="Describe what you want to create..."></textarea>
+        <button id="runCreative">Generate</button>
+        <pre id="creativeOutput"></pre>
+      </section>
+      <section class="panel">
+        <h2>Verified Mode</h2>
+        <input id="axioms" placeholder="axiom set (e.g., finance.gaap2025)" />
+        <button id="runVerified">Generate & Verify</button>
+        <pre id="verifiedOutput"></pre>
+      </section>
+    </main>
+  </div>
+  <script src="main.js"></script>
+</body>
+</html>

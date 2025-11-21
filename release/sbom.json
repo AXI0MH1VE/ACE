@@ -1,5 +1,45 @@
 {
+  "metadata": {
+    "name": "AxiomHive",
+    "version": "2025.11.0",
+    "description": "Edge-native hybrid SSM+attention AI with verified mode and Lightning payments."
+  },
   "components": [
-    {"name": "numpy", "version": "1.26"}
+    {
+      "name": "numpy",
+      "version": "1.26",
+      "type": "python",
+      "scope": "runtime"
+    },
+    {
+      "name": "axiomhive-core",
+      "version": "2025.11.0",
+      "description": "Hybrid SSM (Mamba-2) + attention engine; parallel fusion for linear-time context."
+    },
+    {
+      "name": "lean4-proof-kernel",
+      "version": "4.x",
+      "description": "Lean 4 proof checker, axiom loader, and C=0 signature emitter."
+    },
+    {
+      "name": "wasm-runtime",
+      "version": "wasi-simd-threaded",
+      "description": "WASM/WASI runtime packaged for Podman; SIMDxThreading enabled."
+    },
+    {
+      "name": "dag-scheduler",
+      "version": "0.1.0",
+      "description": "DAG task sharding, P2P/Merkle sync, and chunk reassembly."
+    },
+    {
+      "name": "lightning-payment",
+      "version": "0.1.0",
+      "description": "Neutrino SPV wallet, Lightning micropayments, and atomic streaming billing."
+    },
+    {
+      "name": "frontend-ui",
+      "version": "0.1.0",
+      "description": "Tauri desktop + React/Svelte PWA with Creative/Verified mode toggle."
+    }
   ]
 }

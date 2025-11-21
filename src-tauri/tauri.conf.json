@@ -1,0 +1,25 @@
+{
+  "package": {
+    "productName": "AxiomHive",
+    "version": "0.1.0"
+  },
+  "build": {
+    "beforeDevCommand": "",
+    "beforeBuildCommand": "",
+    "frontendDist": "../public",
+    "devPath": "http://localhost:8080"
+  },
+  "tauri": {
+    "bundle": {
+      "active": true,
+      "targets": "all"
+    },
+    "windows": [
+      {
+        "title": "AxiomHive",
+        "width": 1200,
+        "height": 800
+      }
+    ]
+  }
+}

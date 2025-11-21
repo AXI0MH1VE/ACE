@@ -1,29 +1,41 @@
-# Ace Chatbot – Production-Ready Apex Intelligence
+# AxiomHive — Edge-Native, Verified AI
 
-Ace is a high-performance, goal-oriented AI assistant that maximizes productivity by executing tasks with clarity and proactive excellence. It uses natural language processing to triage directives, generate multiple solutions with analysis, and enforce safety via mathematical constraints. Offline-only, self-hosted on any laptop.
+AxiomHive fuses parallel State Space Models (Mamba-2) with attention heads (5:1 ratio) to deliver creative generation and deterministically verified responses on any device: desktop, browser (WASM), mobile, and Raspberry Pi. Verified mode produces a C=0 signature plus EZKL/Halo2 proof hooks; Creative mode focuses on fast multi-modal sampling.
 
-5-Minute Start
+## Quickstart (local dev)
 
-1. Install uv: curl -LsSf https://astral.sh/uv/install.sh | sh
+1. Install Rust (stable) and Node (if you want to rebuild the browser UI).
+2. Start the edge node + REST API: `cargo run` (serves on `localhost:8090`).
+3. Open `public/index.html` (or `npm serve` / `python -m http.server`) to hit the API.
+4. Build the Tauri desktop shell: run `installer/build.ps1` (Windows) or `installer/build.sh` (macOS/Linux).
 
-2. Run installer for your OS: bash scripts/install_{mac/linux}.sh or .\scripts\install_win.ps1
+## Project Layout
 
-3. uv sync
+- `src/model/` — HybridBlock (parallel SSM + attention), meta-token injector, sliding-window/global attention mix.
+- `src/verification/` — Lean-compatible axiom checker, C=0 signature, EZKL/Halo2 proof stub.
+- `src/dag/` — DAG scheduler, Merkle checkpoints, libp2p peer registry for distributed compute.
+- `src/payment/` — Lightning billing helper (Neutrino/SPV ready).
+- `src-tauri/` — Tauri desktop shell invoking the Rust core.
+- `public/` — Browser UI hitting the REST endpoints.
+- `openapi.yaml` — REST/OpenAPI contract for creative and verified flows.
+- `docs/` — Roadmap, sample axiom sets, and operational notes.
 
-4. uv run python src/ace.py
+## Dual Modes
 
-5. Test: uv run python -c "from src.ace import Ace; ace = Ace(); print(ace.process('Compute 2+2'))"
+- **Creative**: probabilistic SSM+attention sampling, multi-modal hooks (text/image/audio/PDF). Faster, lower-stakes.
+- **Verified**: deterministic generation + axiom enforcement + C=0 signature; EZKL/Halo2 proof hook for ZK attestations; Lightning micropayment gating per proof.
 
-30-Minute Deep Runbook
+## API (edge node)
 
-- Edit configs/directive.yaml for custom laws/thresholds.
+- `POST /api/v1/creative` → `{ prompt, media, temperature, top_k }`
+- `POST /api/v1/verified` → `{ prompt, axiom_set, max_steps }`
 
-- Run tests: just test
+See `openapi.yaml` for the full schema.
 
-- Benchmark: just bench
+## Browser/Edge (WASM)
 
-- Package for distribution: just package (produces ace-chatbot.zip with binaries)
+`src/lib.rs` exposes `wasm_generate` for deterministic responses; compile with `wasm-pack` or `cargo build --target wasm32-wasi`.
 
-- Telemetry: enable in otel_config.yaml; run with OTEL_ENABLED=1 for local traces.
+## Roadmap
 
-- Extend: add local LLM in nlp.py for better generation; see CONTRIBUTING.md.
+See `docs/roadmap.md` for a 90-day launch plan and `docs/axioms/finance.md` for a sample regulated axiom set.
