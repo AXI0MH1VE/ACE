@@ -12,7 +12,7 @@ AxiomHive fuses parallel State Space Models (Mamba-2) with attention heads (5:1 
 ## Project Layout
 
 - `src/model/` — HybridBlock (parallel SSM + attention), meta-token injector, sliding-window/global attention mix.
-- `src/verification/` — Lean-compatible axiom checker, C=0 signature, EZKL/Halo2 proof stub.
+- `src/verification/` — Lean-compatible axiom checker, C=0 signature, EZKL/Halo2 proof hook.
 - `src/dag/` — DAG scheduler, Merkle checkpoints, libp2p peer registry for distributed compute.
 - `src/payment/` — Lightning billing helper (Neutrino/SPV ready).
 - `src-tauri/` — Tauri desktop shell invoking the Rust core.

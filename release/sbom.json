@@ -9,37 +9,47 @@
       "name": "numpy",
       "version": "1.26",
       "type": "python",
-      "scope": "runtime"
+      "scope": "runtime",
+      "license": "BSD-3-Clause",
+      "purl": "pkg:pypi/numpy@1.26.0"
     },
     {
       "name": "axiomhive-core",
       "version": "2025.11.0",
-      "description": "Hybrid SSM (Mamba-2) + attention engine; parallel fusion for linear-time context."
+      "description": "Hybrid SSM (Mamba-2) + attention engine; parallel fusion for linear-time context.",
+      "license": "Apache-2.0"
     },
     {
       "name": "lean4-proof-kernel",
       "version": "4.x",
-      "description": "Lean 4 proof checker, axiom loader, and C=0 signature emitter."
+      "description": "Lean 4 proof checker, axiom loader, and C=0 signature emitter.",
+      "license": "Apache-2.0",
+      "purl": "pkg:generic/lean4-proof-kernel@4.x"
     },
     {
       "name": "wasm-runtime",
       "version": "wasi-simd-threaded",
-      "description": "WASM/WASI runtime packaged for Podman; SIMDxThreading enabled."
+      "description": "WASM/WASI runtime packaged for Podman; SIMDxThreading enabled.",
+      "license": "Apache-2.0",
+      "purl": "pkg:generic/wasi-runtime@simd-threaded"
     },
     {
       "name": "dag-scheduler",
       "version": "0.1.0",
-      "description": "DAG task sharding, P2P/Merkle sync, and chunk reassembly."
+      "description": "DAG task sharding, P2P/Merkle sync, and chunk reassembly.",
+      "license": "Apache-2.0"
     },
     {
       "name": "lightning-payment",
       "version": "0.1.0",
-      "description": "Neutrino SPV wallet, Lightning micropayments, and atomic streaming billing."
+      "description": "Neutrino SPV wallet, Lightning micropayments, and atomic streaming billing.",
+      "license": "MIT"
     },
     {
       "name": "frontend-ui",
       "version": "0.1.0",
-      "description": "Tauri desktop + React/Svelte PWA with Creative/Verified mode toggle."
+      "description": "Tauri desktop + React/Svelte PWA with Creative/Verified mode toggle.",
+      "license": "MIT"
     }
   ]
 }

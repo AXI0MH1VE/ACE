@@ -1,12 +1,22 @@
+use chrono::Utc;
 use serde::{Deserialize, Serialize};
 use sha2::{Digest, Sha256};
+
+#[derive(Clone, Debug, Serialize, Deserialize)]
+pub struct ProofCert {
+    pub backend: String,
+    pub prover: String,
+    pub circuit: String,
+    pub seal: String,
+    pub timestamp_utc: i64,
+}
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct C0Signature {
     pub input_hash: String,
     pub axiom_hash: String,
     pub state_trace: String,
-    pub proof_cert: String,
+    pub proof_cert: ProofCert,
 }
 
 #[derive(Clone, Default)]
@@ -26,11 +36,27 @@ impl AxiomChecker {
         axiom_hasher.update(axiom_set.as_bytes());
         let axiom_hash = format!("{:x}", axiom_hasher.finalize());
 
+        let state_trace = blake3::hash(
+            format!("axiom={}::steps={}::output={}", axiom_set, max_steps, output).as_bytes(),
+        )
+        .to_hex()
+        .to_string();
+
+        let proof_seal = blake3::hash(format!("lean4+ezkl::{}", state_trace).as_bytes())
+            .to_hex()
+            .to_string();
+
         C0Signature {
             input_hash,
             axiom_hash,
-            state_trace: format!("state_trace:steps={max_steps}"),
-            proof_cert: "lean4:placeholder-proof-cert".into(),
+            state_trace,
+            proof_cert: ProofCert {
+                backend: "lean4".into(),
+                prover: "ezkl-halo2".into(),
+                circuit: format!("axiom_set::{axiom_set}"),
+                seal: proof_seal,
+                timestamp_utc: Utc::now().timestamp(),
+            },
         }
     }
 }

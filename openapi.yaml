@@ -90,7 +90,14 @@ components:
             input_hash: { type: string }
             axiom_hash: { type: string }
             state_trace: { type: string }
-            proof_cert: { type: string }
+            proof_cert:
+              type: object
+              properties:
+                backend: { type: string }
+                prover: { type: string }
+                circuit: { type: string }
+                seal: { type: string }
+                timestamp_utc: { type: integer, format: int64 }
         proof_uri:
           type: string
         merkle_root:

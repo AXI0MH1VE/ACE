@@ -10,5 +10,8 @@ fn creative_and_verified_paths_work() {
     let verified = hybrid.generate_verified("hello");
     let checker = AxiomChecker::new();
     let sig = checker.verify_and_sign(&verified, "finance", 128);
-    assert!(sig.input_hash.len() > 0);
+    assert!(!sig.input_hash.is_empty());
+    assert!(!sig.axiom_hash.is_empty());
+    assert!(!sig.state_trace.is_empty());
+    assert!(!sig.proof_cert.seal.is_empty());
 }

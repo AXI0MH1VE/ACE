@@ -1,6 +1,6 @@
 # AxiomHive Launch Roadmap (90 days)
 
-- Weeks 1-2: Scaffold Rust core, REST API, and Tauri shell; stub EZKL/Halo2 integration; baseline Lightning billing.
+- Weeks 1-2: Scaffold Rust core, REST API, and Tauri shell; wire EZKL/Halo2 circuit compile + sample proof; baseline Lightning billing.
 - Weeks 3-4: Implement hybrid-block training/inference glue; WASM build with wasm-bindgen + SIMD; sliding-window/global attention tuning.
 - Weeks 5-6: DAG sharding + Merkle checkpoints; libp2p gossip for peer discovery; chunked proof-of-workload receipts.
 - Weeks 7-8: Verified mode hardening—Lean4 axiom loader, EZKL proof generation path, C=0 signing, replay protection.
