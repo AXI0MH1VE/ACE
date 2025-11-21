@@ -19,6 +19,27 @@ pub struct C0Signature {
     pub proof_cert: ProofCert,
 }
 
+impl C0Signature {
+    pub fn empty() -> Self {
+        Self {
+            input_hash: String::new(),
+            axiom_hash: String::new(),
+            state_trace: String::new(),
+            proof_cert: ProofCert {
+                backend: String::new(),
+                prover: String::new(),
+                circuit: String::new(),
+                seal: String::new(),
+                timestamp_utc: 0,
+            },
+        }
+    }
+
+    pub fn is_empty(&self) -> bool {
+        self.input_hash.is_empty() || self.axiom_hash.is_empty() || self.proof_cert.seal.is_empty()
+    }
+}
+
 #[derive(Clone, Default)]
 pub struct AxiomChecker;
 

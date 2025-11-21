@@ -75,7 +75,15 @@ components:
           type: string
         max_steps:
           type: integer
-      required: [prompt]
+        payment_token:
+          type: string
+        allow_network:
+          type: boolean
+          description: Allow networked operations (remote proofs/peers); defaults to false/offline.
+        free_local:
+          type: boolean
+          description: Bypass payment requirement for local-only verified runs (if node policy allows).
+      required: [prompt, axiom_set]
     VerifiedResponse:
       type: object
       properties:

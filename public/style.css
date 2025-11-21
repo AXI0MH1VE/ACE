@@ -43,6 +43,14 @@ button {
   font-weight: 600;
   cursor: pointer;
 }
+label.inline {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 6px 0;
+  font-size: 14px;
+  color: #cbd5e1;
+}
 pre {
   background: rgba(0, 0, 0, 0.35);
   border-radius: 12px;

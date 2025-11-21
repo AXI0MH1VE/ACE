@@ -22,6 +22,13 @@
       <section class="panel">
         <h2>Verified Mode</h2>
         <input id="axioms" placeholder="axiom set (e.g., finance.gaap2025)" />
+        <label class="inline">
+          <input type="checkbox" id="allowNetwork" /> Allow network (remote proofs/peers)
+        </label>
+        <label class="inline">
+          <input type="checkbox" id="freeLocal" /> Free local verified run (no Lightning)
+        </label>
+        <input id="paymentToken" placeholder="payment token (ln invoice or session token)" />
         <button id="runVerified">Generate & Verify</button>
         <pre id="verifiedOutput"></pre>
       </section>
